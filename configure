@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+#  This script auto-configures mine.
+#
+#  configuration steps:
+#
+#    1. tell git to ignore mine stuff
+#
+#       a. find an exisisting global excludesfile
+#            `git config --global --get core.excludesfile`
+#
+#          or set it ~/.gitignore_global
+#            `git config --global --add core.excludesfile ~/.gitignore_global`
+#
+#       b. add a rule to exclude `*_mine_*`
+#
+#    2. add a function to your bash starup file to call
+#       the mine executable at ${PWD}/mine
+#
+#####
+
+function print_instructions () {
+  echo
+  echo
+  echo "You'll need to take a few steps yoursef:"
+  echo
+  cat "$0" | sed -n '/configuration steps:/,/^##/{/^##/q;s/^.//p}'
+  echo
+}
+
+echo
+echo "What are you using? enter the number"
+echo
+types="mac ubuntu zsh NONE"
+select shell_type in $types; do
+  case $shell_type in
+
+    "mac")    shell_rc="${HOME}/.bash_profile" && break ;;
+    "ubuntu") shell_rc="${HOME}/.bashrc"       && break ;;
+    "zsh")    shell_rc="${HOME}/.zshrc"        && break ;;
+
+    "NONE")   print_instructions && exit 1 ;;
+  esac
+done
+
+echo
+echo "adding to $(tput setaf 6)${shell_rc}$(tput setaf 9)"
+echo "done"
+echo
+
+# identify global gitignore
+excludes=$(git config --global --get core.excludesfile)
+
+# set it to the default
+git config --global --add core.excludesfile ${excludes:=~/.gitignore_global}
+
+# append the ``*_mine_*'' rule to the file
+sed -i -e '/^\*_mine_\*$/q' \
+       -e '$ a *_mine_*' ${excludes}
+
+(
+cat <<END_OF_FUNCTION
+
+# mine configuration
+export MINE_LOCATION=${PWD}
+function mine () {
+  \${MINE_LOCATION}/mine \$@
+}
+END_OF_FUNCTION
+) >> ${shell_rc}
+
+echo
+echo "$(tput setaf 2)mine is all configured!$(tput sgr0)"
+echo
+echo "    $(tput bold)${excludes}$(tput sgr0) is the global git ignore file"
+echo "    filenames matching $(tput bold)*_mine_*$(tput sgr0) will be ignored"
+echo
+echo "    to use mine now, run the following to source your new configuration"
+echo
+echo "        source $(tput setaf 6)${shell_rc}$(tput sgr0)"
+echo

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+export git_root=$(git rev-parse --show-toplevel) || exit 1;
+export current_name=${git_root##*/}
+
+export mine_config=${MINE_LOCATION}/config
+export mine_backups=${MINE_LOCATION}/snapshots
+export backup_dir=${mine_backups}/${current_name}
+
+mine_dirpath(){
+  for name in $@; do
+    readlink -f $1 | sed "s!${git_root}/!!"
+  done
+}
+
+mine_snap(){ #HELPTEXT take a snapshot of all the mine files in the project
+  rsync --quiet -vr --filter="+ */" --filter="+ **_mine_**" --filter="- *" \
+        --prune-empty-dirs ${git_root} ${mine_backups}/
+};
+
+mine_restore(){ #HELPTEXT restore the last snapshot of the mine files
+  if [ -d "${backup_dir}" ]; then
+    rsync --quiet -vr ${mine_backups}/${current_name}/ ${git_root}/
+  else
+    echo "no backups found for ${current_name}" && exit 1
+  fi
+};
+
+mine_clean(){ #HELPTEXT cleans the current repo of all mine files
+  echo
+  find ${git_root} -path '*_mine_*' -exec echo "  '{}'" \;
+  printf "\nremove these files? (y/n) " && read yn
+  if [[ "$yn" == "y" ]]; then
+    find ${git_root} -path '*_mine_*' -exec rm -rf '{}' \;
+  fi
+};
+
+mine_list(){ #HELPTEXT list all the files in mine's juristiction
+  local files=$(find ${git_root} -path '*_mine_*' | \
+                sed -e "s!${git_root}!${current_name}!" -e 's/^/    /')
+  printf "\n${files:-no mine files}\n\n"
+};
+
+mine_touch(){ #HELPTEXT `mine touch <file>` is an alias for `touch <file>_mine_`, because `_` is a pain.
+  for name in $@; do touch ${name}_mine_; done
+};
+
+mine_help(){
+  hl=$(tput bold)
+  norm=$(tput sgr0)
+  printf "\n${hl}mine${norm}"
+  printf " | your own space in a git repo\n\n"
+  sed -n -e '${LINENO}d' -e '/#HELPTEXT/{s/^[^_]\+_\([a-z]\+\)[^#]\+#HELPTEXT\(.*$\)/  mine \1\t\2\n/;p}' < $0
+};
+
+case $1 in
+  help|touch|clean|list|restore|snap) mine_"$1" "${@:2}" ;;
+  *) mine_help ;;
+esac
