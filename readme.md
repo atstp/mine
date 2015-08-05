@@ -1,4 +1,4 @@
-# mine
+![mine](http://atstp.github.io/hey_git_thats_mine/mine_logo.svg?v1)
 
 > keep your notes, wips, and tinkerings out of git's hands (and _semi_ tracked)
 
