@@ -16,6 +16,29 @@
     bash ./configure
     # now exit and reopen your terminal
 
+## what's it do?
+
+add `_mine_` to the name of any file that is well... yours.
+
+    # a couple files will be ignored by git/mercurial
+    # and managed by mine
+
+    some_repository/
+      readme.md
+      cleanUp_mine_.sh                # ✓ this file
+      bin/
+        build
+        generate
+        fixEveryonesWhitespace_mine_  # ✓ this file
+      src/
+        main.file
+        ...
+      _mine_/                         # ✓ this dir
+        notes                         # ✓ this file
+        todays-todo                   # ✓ this file
+
+now run `mine` `snap`, `restore`, and `clean` to manage these files!
+
 --------------------------------------------------------------------------------
 
 #### install/config extra info
