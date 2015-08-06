@@ -2,26 +2,11 @@
 
 > keep your in-repo notes, wips, and tinkerings out of git's hands (and _semi_ tracked)
 
-## commands
-
-  * **`mine snap`** - replace the old snapshot with your current `_mine_` files
-  * **`mine restore`** - restore the last `_mine_` snapshot to your project
-  * **`mine clean`** - remove all `_mine_` files from your repo
-  * **`mine touch`** - simpler than `touch someFileName_mine_`
-  * **`mine list`** - list the files under _mine_'s aegis
-
-### quickstart
-
-    git clone https://github.com/atstp/mine.git ~/.mine && cd ~/.mine
-    bash ./configure
-    # now exit and reopen your terminal
-
 ## what's it do?
 
 add `_mine_` to the name of any file that is well... yours.
 
-    # a couple files will be ignored by git/mercurial
-    # and managed by mine
+    # the file with names contiaining "_mine_" are ignored by git
 
     some_repository/
       readme.md
@@ -37,7 +22,21 @@ add `_mine_` to the name of any file that is well... yours.
         notes                         # ✓ this file
         todays-todo                   # ✓ this file
 
-now run `mine` `snap`, `restore`, and `clean` to manage these files!
+`mine` commands _only_ touch those files
+
+## commands
+
+  * **`mine snap`** - replace the old snapshot with your current `_mine_` files
+  * **`mine restore`** - restore the last `_mine_` snapshot to your project
+  * **`mine clean`** - remove all `_mine_` files from your repo
+  * **`mine touch`** - simpler than `touch someFileName_mine_`
+  * **`mine list`** - list the files under _mine_'s aegis
+
+### quickstart
+
+    git clone https://github.com/atstp/mine.git ~/.mine && cd ~/.mine
+    bash ./configure
+    # now exit and reopen your terminal
 
 --------------------------------------------------------------------------------
 
