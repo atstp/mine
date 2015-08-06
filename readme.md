@@ -4,11 +4,12 @@
 
 ## what's it do?
 
-add `_mine_` to the name of any file that is well... yours; git will steer clear of them:
+**mine** lets you add `_mine_` to the name of any files that are well... yours;
+git will steer clear of them.
 
     some_repository/
         readme.md
-        cleanUp_mine_.sh                 # ✓ this file
+        update_mine_.sh                   # ✓ this file
         bin/
             build
             generate
