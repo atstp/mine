@@ -1,4 +1,4 @@
-![mine](http://atstp.github.io/hey_git_thats_mine/mine_logo.svg?v2)
+![mine](http://atstp.github.io/mine/mine_logo.svg?v2)
 
 > keep your in-repo notes, wips, and tinkerings out of git's hands (and _semi_ tracked)
 
@@ -12,7 +12,7 @@
 
 ### quickstart
 
-    git clone https://github.com/atstp/hey_git_thats_mine.git ~/.mine && cd ~/.mine
+    git clone https://github.com/atstp/mine.git ~/.mine && cd ~/.mine
     bash ./configure
     # now exit and reopen your terminal
 
