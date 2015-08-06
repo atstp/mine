@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
-export git_root=$(git rev-parse --show-toplevel) || exit 1;
-export current_name=${git_root##*/}
+export git_root=$(git rev-parse --show-toplevel 2> /dev/null)
+export hg_root=$(hg root 2> /dev/null)
+
+if [ ! -z "${git_root}" ]; then
+  project_root=${git_root}
+elif [ ! -z "${hg_root}" ]; then
+  project_root=${hg_root}
+else
+  echo "you must be in a git or mercurial repo to use mine"; exit 1
+fi
+
+export current_name=${project_root##*/}
 
 export mine_config=${MINE_LOCATION}/config
 export mine_backups=${MINE_LOCATION}/snapshots
@@ -9,18 +19,18 @@ export backup_dir=${mine_backups}/${current_name}
 
 mine_dirpath(){
   for name in $@; do
-    readlink -f $1 | sed "s!${git_root}/!!"
+    readlink -f $1 | sed "s!${project_root}/!!"
   done
 }
 
 mine_snap(){ #HELPTEXT take a snapshot of all the mine files in the project
   rsync --quiet -vr --filter="+ */" --filter="+ **_mine_**" --filter="- *" \
-        --prune-empty-dirs ${git_root} ${mine_backups}/
+        --prune-empty-dirs ${project_root} ${mine_backups}/
 };
 
 mine_restore(){ #HELPTEXT restore the last snapshot of the mine files
   if [ -d "${backup_dir}" ]; then
-    rsync --quiet -vr ${mine_backups}/${current_name}/ ${git_root}/
+    rsync --quiet -vr ${mine_backups}/${current_name}/ ${project_root}/
   else
     echo "no backups found for ${current_name}" && exit 1
   fi
@@ -28,16 +38,16 @@ mine_restore(){ #HELPTEXT restore the last snapshot of the mine files
 
 mine_clean(){ #HELPTEXT cleans the current repo of all mine files
   echo
-  find ${git_root} -path '*_mine_*' -exec echo "  '{}'" \;
+  find ${project_root} -path '*_mine_*' -exec echo "  '{}'" \;
   printf "\nremove these files? (y/n) " && read yn
   if [[ "$yn" == "y" ]]; then
-    find ${git_root} -path '*_mine_*' -exec rm -rf '{}' \;
+    find ${project_root} -path '*_mine_*' -exec rm -rf '{}' \;
   fi
 };
 
 mine_list(){ #HELPTEXT list all the files in mine's juristiction
-  local files=$(find ${git_root} -path '*_mine_*' | \
-                sed -e "s!${git_root}!${current_name}!" -e 's/^/    /')
+  local files=$(find ${project_root} -path '*_mine_*' | \
+                sed -e "s!${project_root}!${current_name}!" -e 's/^/    /')
   printf "\n${files:-no mine files}\n\n"
 };
 

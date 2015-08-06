@@ -20,14 +20,15 @@
 
 #### install/config extra info
 
-the not-so-hairy details: it adds two lines to your shell startup file
+the not-so-hairy details: (what the configure script does)
+
+add two lines to your shell startup file
 
     export MINE_LOCATION=~/.mine   # where you cloned the repo
     function mine () { ${MINE_LOCATION}/mine $@; }
 
-and adds one line to your global gitignore/excludesfile
+add one rule to your global ignore file
 
     *_mine_*
-
 
 you'll have to restart your termial for the changes to take effect
