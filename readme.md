@@ -4,23 +4,21 @@
 
 ## what's it do?
 
-add `_mine_` to the name of any file that is well... yours.
-
-    # the file with names contiaining "_mine_" are ignored by git
+add `_mine_` to the name of any file that is well... yours; git will steer clear of them:
 
     some_repository/
-      readme.md
-      cleanUp_mine_.sh                # ✓ this file
-      bin/
-        build
-        generate
-        fixEveryonesWhitespace_mine_  # ✓ this file
-      src/
-        main.file
-        ...
-      _mine_/                         # ✓ this dir
-        notes                         # ✓ this file
-        todays-todo                   # ✓ this file
+        readme.md
+        cleanUp_mine_.sh                 # ✓ this file
+        bin/
+            build
+            generate
+            fixEveryonesWhitespace_mine_  # ✓ this file
+        src/
+            main.file
+            ...
+        _mine_/                           # ✓ this dir
+            notes                         # ✓ this file
+            todays-todo                   # ✓ this file
 
 `mine` commands _only_ touch those files
 
