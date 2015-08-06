@@ -1,9 +1,5 @@
 ![mine](http://atstp.github.io/mine/mine_logo.svg?v2)
 
-> keep your in-repo notes, wips, and tinkerings out of git's hands (and _semi_ tracked)
-
-## what's it do?
-
 **mine** lets you add `_mine_` to the name of any files that are well... yours;
 git will steer clear of them.
 
@@ -31,9 +27,10 @@ git will steer clear of them.
   * **`mine touch`** - simpler than `touch someFileName_mine_`
   * **`mine list`** - list the files under _mine_'s aegis
 
-### quickstart
+### use it
 
-    git clone https://github.com/atstp/mine.git ~/.mine && cd ~/.mine
+    git clone https://github.com/atstp/mine.git ~/.mine
+    cd ~/.mine
     bash ./configure
     # now exit and reopen your terminal
 
