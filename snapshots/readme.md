@@ -2,9 +2,9 @@
 
 > this is where your snapshots live
 
-this directory's `.gitignore` says to handles the `mine` backups.
-my default backups aren't tracked. Uncomment the line
+this directory's `.gitignore` has a commented rule that, **if uncommented**,
+will enable tracking `mine` snapshots. By default backups aren't tracked.
 
     #!*_mine_*
 
-to start tracking your snapshots.
+removing the `#` would let you version your backups.
