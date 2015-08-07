@@ -34,6 +34,12 @@ git will steer clear of them.
     bash ./configure
     # now exit and reopen your terminal
 
+### update it
+
+    cd ~/.mine
+    git pull
+    # hooray!
+
 --------------------------------------------------------------------------------
 
 #### install/config extra info
