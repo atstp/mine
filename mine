@@ -37,9 +37,8 @@ mine_restore(){ #HELPTEXT restore the last project snapshot
 };
 
 mine_clean(){ #HELPTEXT remove all _mine_ files from the current repo
-  echo
-  find ${project_root} -path '*_mine_*' -exec echo "  '{}'" \;
-  printf "\nremove these files? (y/n) " && read yn
+  mine_list && printf "remove these files? (y/n) "
+  read yn
   if [[ "$yn" == "y" ]]; then
     find ${project_root} -path '*_mine_*' -exec rm -rf '{}' \;
   fi
