@@ -55,6 +55,12 @@ mine_touch(){ #HELPTEXT `mine touch <file>` is an alias for `touch <file>_mine_`
   for name in $@; do touch ${name}_mine_; done
 };
 
+mine_init(){ #HELPTEXT creates a `<projectname>_mine_.md` file and a `_mine_/` directory
+  local newdir=${project_root}/_mine_
+  if [ ! -d "${newdir}" ]; then mkdir ${newdir} ; fi
+  touch ${current_name}_mine_.md ${newdir}/{notes,todo}.md
+};
+
 mine_help(){
   hl=$(tput bold)
   norm=$(tput sgr0)
@@ -64,6 +70,6 @@ mine_help(){
 };
 
 case $1 in
-  help|touch|clean|list|restore|snap) mine_"$1" "${@:2}" ;;
+  help|touch|clean|list|restore|snap|init) mine_"$1" "${@:2}" ;;
   *) mine_help ;;
 esac
