@@ -23,12 +23,12 @@ mine_dirpath(){
   done
 }
 
-mine_snap(){ #HELPTEXT take a snapshot of all the mine files in the project
+mine_snap(){ #HELPTEXT snapshot of the project's mine files
   rsync --quiet -vr --filter="+ */" --filter="+ **_mine_**" --filter="- *" \
         --prune-empty-dirs ${project_root} ${mine_backups}/
 };
 
-mine_restore(){ #HELPTEXT restore the last snapshot of the mine files
+mine_restore(){ #HELPTEXT restore the last project snapshot
   if [ -d "${backup_dir}" ]; then
     rsync --quiet -vr ${mine_backups}/${current_name}/ ${project_root}/
   else
@@ -36,7 +36,7 @@ mine_restore(){ #HELPTEXT restore the last snapshot of the mine files
   fi
 };
 
-mine_clean(){ #HELPTEXT cleans the current repo of all mine files
+mine_clean(){ #HELPTEXT remove all _mine_ files from the current repo
   echo
   find ${project_root} -path '*_mine_*' -exec echo "  '{}'" \;
   printf "\nremove these files? (y/n) " && read yn
@@ -45,13 +45,13 @@ mine_clean(){ #HELPTEXT cleans the current repo of all mine files
   fi
 };
 
-mine_list(){ #HELPTEXT list all the files in mine's juristiction
+mine_list(){ #HELPTEXT list all of the _mine_ files in the project
   local files=$(find ${project_root} -path '*_mine_*' | \
                 sed -e "s!${project_root}!${current_name}!" -e 's/^/    /')
   printf "\n${files:-no mine files}\n\n"
 };
 
-mine_touch(){ #HELPTEXT `mine touch <file>` is an alias for `touch <file>_mine_`, because `_` is a pain.
+mine_touch(){ #HELPTEXT an alias for `touch <file>_mine_`, because `_` is a pain.
   for name in $@; do touch ${name}_mine_; done
 };
 
@@ -64,9 +64,10 @@ mine_init(){ #HELPTEXT creates a `<projectname>_mine_.md` file and a `_mine_/` d
 mine_help(){
   hl=$(tput bold)
   norm=$(tput sgr0)
-  printf "\n${hl}mine${norm}"
-  printf " | your own space in a git repo\n\n"
-  sed -n -e '${LINENO}d' -e '/#HELPTEXT/{s/^[^_]\+_\([a-z]\+\)[^#]\+#HELPTEXT\(.*$\)/  mine \1\t\2\n/;p}' < $0
+  printf "\n${hl}mine${norm} | manage your personal, project-related files in a versioned repo\n\n"
+  sed -n -e "${LINENO}q" -e '/#HELPTEXT/{s!^[^_]\+_\([a-z]\+\)[^#]\+#HELPTEXT\(.*$\)!  \1\t\2!;p}' $0 \
+  | column -t -s $'\t'
+  echo
 };
 
 case $1 in
