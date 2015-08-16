@@ -5,17 +5,17 @@ git will steer clear of them.
 
     some_repository/
         readme.md
-        update_mine_.sh                   # ✓ this file
+        update_mine_.sh                   # ✓ yours!
         bin/
             build
             generate
-            fixEveryonesWhitespace_mine_  # ✓ this file
+            fixEveryonesWhitespace_mine_  # ✓ yours!
         src/
             main.file
             ...
-        _mine_/                           # ✓ this dir
-            notes                         # ✓ this file
-            todays-todo                   # ✓ this file
+        _mine_/                           # in a _mine_ dir
+            notes                         # ✓ yours!
+            todays-todo                   # ✓ yours!
 
 `mine` commands _only_ touch those files
 
