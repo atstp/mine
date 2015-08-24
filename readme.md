@@ -28,7 +28,7 @@ git will steer clear of them.
   * **`mine touch`** - simpler than `touch someFileName_mine_`
   * **`mine list`** - list the files under _mine_'s aegis
 
-### use it
+### get it
 
     git clone https://github.com/atstp/mine.git ~/.mine
     cd ~/.mine
