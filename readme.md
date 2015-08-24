@@ -43,17 +43,5 @@ git will steer clear of them.
 
 --------------------------------------------------------------------------------
 
-#### install/config extra info
-
-the not-so-hairy details: (what the configure script does)
-
-add two lines to your shell startup file
-
-    export MINE_LOCATION=~/.mine   # where you cloned the repo
-    function mine () { ${MINE_LOCATION}/mine $@; }
-
-add one rule to your global ignore file
-
-    *_mine_*
-
-you'll have to restart your termial for the changes to take effect
+mercurial users: after running `./configure`, you'll have to manually add a rule
+to globally ignore `*_mine_*` files
