@@ -24,6 +24,7 @@ git will steer clear of them.
   * **`mine snap`** - replace the old snapshot with your current `_mine_` files
   * **`mine restore`** - restore the last `_mine_` snapshot to your project
   * **`mine clean`** - remove all `_mine_` files from your repo
+  * **`mine purge`** - purge all mine files from the current project _and_ backups
   * **`mine touch`** - simpler than `touch someFileName_mine_`
   * **`mine list`** - list the files under _mine_'s aegis
 

@@ -44,6 +44,15 @@ mine_clean(){ #HELPTEXT remove all _mine_ files from the current repo
   fi
 };
 
+mine_purge(){ #HELPTEXT purge all mine files from the current project AND backups
+  mine_list && printf "purge all _mine_ files for ${current_name}? (y/n) "
+  read yn
+  if [[ "$yn" == "y" ]]; then
+    rm -r ${mine_backups}/${current_name}/
+    find ${project_root} -path '*_mine_*' -exec rm -rf '{}' \;
+  fi
+};
+
 mine_list(){ #HELPTEXT list all of the _mine_ files in the project
   local files=$(find ${project_root} -path '*_mine_*' | \
                 sed -e "s!${project_root}!${current_name}!" -e 's/^/    /')
@@ -70,6 +79,6 @@ mine_help(){
 };
 
 case $1 in
-  help|touch|clean|list|restore|snap|init) mine_"$1" "${@:2}" ;;
+  help|touch|clean|purge|list|restore|snap|init) mine_"$1" "${@:2}" ;;
   *) mine_help ;;
 esac
