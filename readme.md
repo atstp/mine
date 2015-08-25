@@ -65,7 +65,15 @@ you're happy keeping your repo related stuff outside the repo it relates to.
     cd ~/.mine
     git pull
 
+### license
+
+MIT
+
 --------------------------------------------------------------------------------
 
-mercurial users: after running `./configure`, you'll have to manually add a rule
-to globally ignore `*_mine_*` files
+mercurial users: after running `./configure`, you'll have to manually add a
+rule to globally ignore `*_mine_*` files, in the `syntax: glob` section
+
+If you're curious, reimplementing this project would be a good way to get
+familiar with a handful of stuff: global git ignores, bash scripting,
+git-config, rsync, sed and find.
