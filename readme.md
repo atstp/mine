@@ -19,9 +19,10 @@ name files `_mine_` and they're, well... yours
 
 git is awesome for tracking large, decentralized projects &mdash; no doubt about
 it :ok_hand:. This is because it's built for "the project" :package:, not you :wave:.
-So, some of its shortcomings are pretty understandable: 1)&nbsp;respecting your space
-in a project 2)&nbsp;keeping a common thread between branches and 3)&nbsp;letting
-you hack away quickly on small, fast-paced, experimental projects.
+So it's understandable that there a some things git doesn't immediately cater to:
+1)&nbsp;respecting your space in a project 2)&nbsp;keeping a common thread between
+branches and 3)&nbsp;letting you hack away quickly on small, fast-paced, or
+experimental projects.
 
 This is where mine comes in.
 
@@ -57,7 +58,7 @@ you're happy keeping your repo related stuff outside the repo it relates to.
   * **`mine snap`** - take a snapshot of your current `_mine_` files
   * **`mine restore`** - restore the last snapshot
   * **`mine clean`** - remove all `_mine_` files from your repo
-  * **`mine purge`** - purge all mine files for the current project _and_ backups
+  * **`mine purge`** - purge all mine files from the current project _and_ backups
   * **`mine touch`** - simpler than `touch someFileName_mine_`
   * **`mine list`** - list the files under _mine_'s aegis
   * **`mine help`**
