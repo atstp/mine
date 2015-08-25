@@ -1,6 +1,6 @@
-![mine](http://atstp.github.io/mine/mine_logo.svg?v2)
+![mine](http://atstp.github.io/mine/mine_banner.svg?v0)
 
-name files `_mine_` and they're, well... yours
+add `_mine_` to a filename and it's, well... yours
 
     some_repository/
         readme.md
@@ -17,23 +17,13 @@ name files `_mine_` and they're, well... yours
             todays-todo                   # ✓ yours
         ...
 
-git is awesome for tracking large, decentralized projects &mdash; no doubt about
-it :ok_hand:. This is because it's built for "the project" :package:, not you :wave:.
-So it's understandable that there a some things git doesn't immediately cater to:
-1)&nbsp;respecting your space in a project 2)&nbsp;keeping a common thread between
-branches and 3)&nbsp;letting you hack away quickly on small, fast-paced, or
-experimental projects.
-
-This is where mine comes in.
-
-> If git is a file cabinet, mine is a notepad
-
 `_mine_` files
 
   * stay out of git's history
-  * persist through `checkout`, `rebase`, and `reset`
+  * persist through `git checkout`, `rebase`, and `reset`
+  * respond to `mine` commands
+  * can be wiped from the repo with a single command
   * are easily backed-up and restored (separate from git)
-  * can be cleaned from the repo with a single command
 
 which means you can
 
@@ -68,13 +58,12 @@ you're happy keeping your repo related stuff outside the repo it relates to.
     git clone https://github.com/atstp/mine.git ~/.mine
     cd ~/.mine
     bash ./configure
-    # now exit and reopen your terminal
+    # exit and reopen your terminal
 
 ### update it
 
     cd ~/.mine
     git pull
-    # hooray!
 
 --------------------------------------------------------------------------------
 
