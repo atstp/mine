@@ -20,30 +20,31 @@ add `_mine_` to a filename and it's, well... yours
 `_mine_` files
 
   * stay out of git's history
+  * don't need to be singled out in the repo's `.gitignore`
   * persist through `git checkout`, `rebase`, and `reset`
   * respond to `mine` commands
-  * can be wiped from the repo with a single command
+  * can be cleaned from the repo with one command
   * are easily backed-up and restored (separate from git)
 
 ![mine](http://atstp.github.io/mine/mine_separation.svg?v0)
 
 which means you can
 
-  * :closed_lock_with_key: store your login info for a related service with your repo
-    _confident it won't be published_
+  * :closed_lock_with_key: store your login info for a related service with your repo,
+    backup-able and safe from publishing
   * :pencil: leave notes for yourself about where you left off and what to do later
-  * :running: keep working with a slapdash script until you get a real one together
+  * :running: work with a slapdash script until you get a real one together
     (and commit that one)
-  * :white_check_mark: maintain a personal todo list
-  * :dash: remove all your personal files in an instant (perhaps before you ftp a bunch of stuff?)
+  * :white_check_mark: keep a personal todo list based on the repo's roadmap/todo
+  * :dash: remove all your personal files in an instant (perhaps before you ftp or rsync)
   * :page_with_curl: store curled or pasted code for reference
   * :link: maintain a collection of useful links that don't belong in git's history
 
 **It's for you**: if you're already comfortable using git through the command line,
 and you're open to new workflows.
 
-**It might not be**: if your workflow hasn't changed because it's already perfect, or if
-you're happy keeping your repo related stuff outside the repo it relates to.
+**It might not be**: if your workflow is already perfect, or if you like keeping your
+repo related stuff outside the repo it relates to.
 
 ## commands
 
@@ -78,6 +79,11 @@ MIT
 mercurial users: after running `./configure`, you'll have to manually add a
 rule to globally ignore `*_mine_*` files, in the `syntax: glob` section
 
-If you're curious, reimplementing this project would be a good way to get
-familiar with a handful of stuff: global git ignores, bash scripting,
+curious newcomers: reimplementing this (small) project would be a good way to
+get familiar with a handful of stuff: global git ignores, bash scripting,
 git-config, rsync, sed and find.
+
+iffy people: if you don't want the script (and if you're interested in my 2 cents),
+adding `*_mine_*` to your global ignore file is pretty great even without it;
+it's semantic, the names are easy to spot and you'll likely be surprised at how
+often you end up using it.
