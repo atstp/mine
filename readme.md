@@ -1,4 +1,4 @@
-![mine](http://atstp.github.io/mine/mine_banner.svg?v0.0)
+![mine](http://atstp.github.io/mine/mine_banner.svg?v0.1)
 
 add `_mine_` to a filename and it's, well... yours
 
@@ -24,6 +24,8 @@ add `_mine_` to a filename and it's, well... yours
   * respond to `mine` commands
   * can be wiped from the repo with a single command
   * are easily backed-up and restored (separate from git)
+
+![mine](http://atstp.github.io/mine/mine_separation.svg?v0)
 
 which means you can
 
