@@ -1,4 +1,4 @@
-![mine](http://atstp.github.io/mine/mine_banner.svg?v0)
+![mine](http://atstp.github.io/mine/mine_banner.svg?v0.0)
 
 add `_mine_` to a filename and it's, well... yours
 
