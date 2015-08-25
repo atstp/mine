@@ -34,8 +34,8 @@ which means you can
     (and commit that one)
   * :white_check_mark: maintain a personal todo list
   * :dash: remove all your personal files in an instant (perhaps before you ftp a bunch of stuff?)
-  * :page_with_curl: store curled or pasted code that will be a good reference
-  * :link: maintain a collections of useful links that don't belong in git's history
+  * :page_with_curl: store curled or pasted code for reference
+  * :link: maintain a collection of useful links that don't belong in git's history
 
 **It's for you**: if you're already comfortable using git through the command line,
 and you're open to new workflows.
@@ -49,7 +49,7 @@ you're happy keeping your repo related stuff outside the repo it relates to.
   * **`mine restore`** - restore the last snapshot
   * **`mine clean`** - remove all `_mine_` files from your repo
   * **`mine purge`** - purge all mine files from the current project _and_ backups
-  * **`mine touch`** - simpler than `touch someFileName_mine_`
+  * **`mine touch`** - an alternative to `touch fileName_mine_`
   * **`mine list`** - list the files under _mine_'s aegis
   * **`mine help`**
 
