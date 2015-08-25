@@ -47,6 +47,8 @@ you're happy keeping your repo related stuff outside the repo it relates to.
 
 ## commands
 
+![mine](http://atstp.github.io/mine/mine_commands.svg?v0)
+
   * **`mine snap`** - take a snapshot of your current `_mine_` files
   * **`mine restore`** - restore the last snapshot
   * **`mine clean`** - remove all `_mine_` files from your repo
