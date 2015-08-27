@@ -24,8 +24,10 @@ mine_dirpath(){
 }
 
 mine_snap(){ #HELPTEXT snapshot of the project's mine files
+  local should_delete='' && [[ $1 == "-D" ]] \
+                         && should_delete='--delete'
   rsync --quiet -vr --filter="+ */" --filter="+ **_mine_**" --filter="- *" \
-        --prune-empty-dirs ${project_root} ${mine_backups}/
+        --prune-empty-dirs ${should_delete:-""} ${project_root} ${mine_backups}/
 };
 
 mine_restore(){ #HELPTEXT restore the last project snapshot
