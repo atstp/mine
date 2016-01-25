@@ -16,12 +16,12 @@ mine_config=${MINE_LOCATION}/config
 
 #support overriding default storage location
 if [[ $MINE_STORAGE ]]; then
-  project_snapshot=$MINE_STORAGE
+  snapshots_dir=$MINE_STORAGE
 else
-  project_snapshot=${MINE_LOCATION}/snapshots
+  snapshots_dir=${MINE_LOCATION}/snapshots
 fi
 
-backup_dir=${project_snapshot}/${current_name}
+project_backup=${snapshots_dir}/${current_name}
 
 mine_dirpath(){
   for name in $@; do
@@ -30,13 +30,22 @@ mine_dirpath(){
 }
 
 mine_debug(){
-echo "     hg_root=${hg_root}"
-echo "    git_root=${git_root}"
-echo "  backup_dir=${backup_dir}"
-echo " mine_config=${mine_config}"
-echo "current_name=${current_name}"
-echo "project_snapshot=${project_snapshot}"
-echo "project_root=${project_root}"
+sed 's/  //' <<VARDUMP
+  global config variables for mine
+
+     MINE_LOCATION=${MINE_LOCATION}
+      MINE_STORAGE=${MINE_STORAGE}
+
+  internal variables for mine
+
+          git_root=${git_root}
+           hg_root=${hg_root}
+      current_name=${current_name}
+      project_root=${project_root}
+       mine_config=${mine_config}
+     snapshots_dir=${snapshots_dir}
+    project_backup=${project_backup}
+VARDUMP
 }
 
 mine_snap(){ #HELPTEXT snapshot of the project's mine files
@@ -45,19 +54,19 @@ mine_snap(){ #HELPTEXT snapshot of the project's mine files
 
   rsync --quiet -vr \
         --filter="+ */" \
-        --filter="+ **._mine**"
+        --filter="+ **._mine**" \
         --filter="- *" \
         --prune-empty-dirs \
         ${should_delete:-""} \
-        ${project_root} ${project_snapshot}/
+        ${project_root}/ ${project_backup}/
 };
 
 mine_restore(){ #HELPTEXT restore the last project snapshot
-  if [ -d "${backup_dir}" ]; then
+  if [ -d "${project_backup}" ]; then
     rsync --quiet -vr \
-          ${project_snapshot}/${current_name}/ ${project_root}/
+          ${project_backup}/ ${project_root}/
   else
-    echo "no backups found for ${current_name} at ${project_snapshot}"
+    echo "no backups found for ${current_name} at ${snapshots_dir}"
     exit 1
   fi
 };
@@ -73,7 +82,7 @@ mine_purge(){ #HELPTEXT purge all mine files from the current project AND backup
   mine_list && printf "purge all ._mine files for ${current_name}? (y/n) "
   read yn
   if [[ "$yn" == "y" ]]; then
-    rm -r ${project_snapshot}/${current_name}/
+    rm -r ${project_backup}
     find ${project_root} -path '*._mine*' -exec rm -rf '{}' \;
   fi
 };
