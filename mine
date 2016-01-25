@@ -29,41 +29,24 @@ mine_dirpath(){
   done
 }
 
-mine_debug(){
-sed 's/  //' <<VARDUMP
-  global config variables for mine
-
-     MINE_LOCATION=${MINE_LOCATION}
-      MINE_STORAGE=${MINE_STORAGE}
-
-  internal variables for mine
-
-          git_root=${git_root}
-           hg_root=${hg_root}
-      current_name=${current_name}
-      project_root=${project_root}
-       mine_config=${mine_config}
-     snapshots_dir=${snapshots_dir}
-    project_backup=${project_backup}
-VARDUMP
-}
-
 mine_snap(){ #HELPTEXT snapshot of the project's mine files
-  local should_delete='' && [[ $1 == "-D" ]] \
-                         && should_delete='--delete'
+  local should_delete && [[ $1 == "--hard" ]] \
+                      && should_delete='--delete'
 
-  rsync --quiet -vr \
-        --filter="+ */" \
-        --filter="+ **._mine**" \
-        --filter="- *" \
+  rsync --quiet \
+        --recursive \
         --prune-empty-dirs \
-        ${should_delete:-""} \
-        ${project_root}/ ${project_backup}/
+        --filter='+ */' \
+        --filter='+ **._mine**' \
+        --filter='- *' \
+        ${should_delete:-''} \
+        ${project_root}/ ${project_backup}
 };
 
 mine_restore(){ #HELPTEXT restore the last project snapshot
   if [ -d "${project_backup}" ]; then
-    rsync --quiet -vr \
+    rsync --quiet
+          --recursive \
           ${project_backup}/ ${project_root}/
   else
     echo "no backups found for ${current_name} at ${snapshots_dir}"
@@ -83,14 +66,16 @@ mine_purge(){ #HELPTEXT purge all mine files from the current project AND backup
   read yn
   if [[ "$yn" == "y" ]]; then
     rm -r ${project_backup}
-    find ${project_root} -path '*._mine*' -exec rm -rf '{}' \;
+    find ${project_root} \
+         -path '*._mine*' \
+         -exec rm -rf '{}' \;
   fi
 };
 
 mine_list(){ #HELPTEXT list all of the ._mine files in the project
   local files=$(find ${project_root} -path '*._mine*' | \
                 sed -e "s!${project_root}/!!" -e 's/^/    /')
-  printf "\n$(tput setaf 6)${files:-no mine files}$(tput sgr0)\n\n"
+  printf "\n${files:-no mine files}\n\n"
 };
 
 mine_touch_file(){
@@ -112,8 +97,12 @@ mine_init(){ #HELPTEXT creates a `<projectname>._mine.md` file and a `notes._min
 };
 
 mine_help(){
-  hl=$(tput bold)
-  norm=$(tput sgr0)
+  local hl=$(tput bold)
+  local norm=$(tput sgr0)
+
+  if [[ $@ ]]; then
+    echo "ERROR: no commands found for \"${@}\""
+  fi
   echo
   printf "${hl}mine${norm} | manage your personal, project-related files in a versioned repo"
   echo
@@ -129,8 +118,46 @@ mine_help(){
   echo
 };
 
+mine_debug(){
+  format_var_dump(){ sed 's/^ \+//' | column -s '=' -t -e | sed 's/^/    /'; }
+  echo "global config variables for mine"
+  format_var_dump <<globals
+      MINE_LOCATION=${MINE_LOCATION}
+      MINE_STORAGE=${MINE_STORAGE}
+globals
+
+  echo
+  echo "internal variables for mine"
+  format_var_dump <<internals
+      git_root=${git_root}
+      hg_root=${hg_root}
+      current_name=${current_name}
+      project_root=${project_root}
+      mine_config=${mine_config}
+      snapshots_dir=${snapshots_dir}
+      project_backup=${project_backup}
+internals
+
+  echo
+  echo "mine's in-repo files"
+  echo "    ${project_backup}/:"
+  find ${project_root} \
+       -path '*._mine*' \
+       -type f \
+       |  sed -e "s!${project_root}/!!" -e 's/^/    /'
+
+  echo
+  echo "mine's last snapshot"
+  echo "    ${project_backup}/:"
+  { find ${project_backup}/ \
+         -type f 2> /dev/null
+  } | sed -e "s!${project_backup}/\?!!" -e 's/^/    /'
+
+  echo
+}
+
 case $1 in
   help|touch|clean|purge|list|restore|snap|init) mine_"$1" "${@:2}" ;;
   debug) mine_debug ;;
-  *) mine_help && exit 1;;
+  *) mine_help "${@:1}" && exit 1;;
 esac
