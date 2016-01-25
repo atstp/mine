@@ -45,7 +45,7 @@ mine_snap(){ #HELPTEXT snapshot of the project's mine files
 
 mine_restore(){ #HELPTEXT restore the last project snapshot
   if [ -d "${project_backup}" ]; then
-    rsync --quiet
+    rsync --quiet \
           --recursive \
           ${project_backup}/ ${project_root}/
   else
