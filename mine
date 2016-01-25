@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
 
-export git_root=$(git rev-parse --show-toplevel 2> /dev/null)
-export hg_root=$(hg root 2> /dev/null)
+git_root=$(git rev-parse --show-toplevel 2> /dev/null)
+hg_root=$(hg root 2> /dev/null)
 
 if [ ! -z "${git_root}" ]; then
-  project_root=${git_root}
+  project_root=${git_root%%/}
 elif [ ! -z "${hg_root}" ]; then
-  project_root=${hg_root}
+  project_root=${hg_root%%/}
 else
   echo "you must be in a git or mercurial repo to use mine"; exit 1
 fi
 
-export current_name=${project_root##*/}
+current_name=${project_root##*/}
+mine_config=${MINE_LOCATION}/config
 
-export mine_config=${MINE_LOCATION}/config
-export mine_backups=${MINE_LOCATION}/snapshots
-export backup_dir=${mine_backups}/${current_name}
+#support overriding default storage location
+if [[ $MINE_STORAGE ]]; then
+  project_snapshot=$MINE_STORAGE
+else
+  project_snapshot=${MINE_LOCATION}/snapshots
+fi
+
+backup_dir=${project_snapshot}/${current_name}
 
 mine_dirpath(){
   for name in $@; do
@@ -23,60 +29,99 @@ mine_dirpath(){
   done
 }
 
+mine_debug(){
+echo "     hg_root=${hg_root}"
+echo "    git_root=${git_root}"
+echo "  backup_dir=${backup_dir}"
+echo " mine_config=${mine_config}"
+echo "current_name=${current_name}"
+echo "project_snapshot=${project_snapshot}"
+echo "project_root=${project_root}"
+}
+
 mine_snap(){ #HELPTEXT snapshot of the project's mine files
   local should_delete='' && [[ $1 == "-D" ]] \
                          && should_delete='--delete'
-  rsync --quiet -vr --filter="+ */" --filter="+ **_mine_**" --filter="- *" \
-        --prune-empty-dirs ${should_delete:-""} ${project_root} ${mine_backups}/
+
+  rsync --quiet -vr \
+        --filter="+ */" \
+        --filter="+ **._mine**"
+        --filter="- *" \
+        --prune-empty-dirs \
+        ${should_delete:-""} \
+        ${project_root} ${project_snapshot}/
 };
 
 mine_restore(){ #HELPTEXT restore the last project snapshot
   if [ -d "${backup_dir}" ]; then
-    rsync --quiet -vr ${mine_backups}/${current_name}/ ${project_root}/
+    rsync --quiet -vr \
+          ${project_snapshot}/${current_name}/ ${project_root}/
   else
-    echo "no backups found for ${current_name}" && exit 1
+    echo "no backups found for ${current_name} at ${project_snapshot}"
+    exit 1
   fi
 };
 
-mine_clean(){ #HELPTEXT remove all _mine_ files from the current repo
-  find ${project_root} -path '*_mine_*' -prune -exec rm -rf '{}' \;
+mine_clean(){ #HELPTEXT remove all ._mine files from the current repo without touching the snapshot
+  find ${project_root} \
+       -path '*._mine*' \
+       -prune \
+       -exec rm -rf '{}' \;
 };
 
 mine_purge(){ #HELPTEXT purge all mine files from the current project AND backups
-  mine_list && printf "purge all _mine_ files for ${current_name}? (y/n) "
+  mine_list && printf "purge all ._mine files for ${current_name}? (y/n) "
   read yn
   if [[ "$yn" == "y" ]]; then
-    rm -r ${mine_backups}/${current_name}/
-    find ${project_root} -path '*_mine_*' -exec rm -rf '{}' \;
+    rm -r ${project_snapshot}/${current_name}/
+    find ${project_root} -path '*._mine*' -exec rm -rf '{}' \;
   fi
 };
 
-mine_list(){ #HELPTEXT list all of the _mine_ files in the project
-  local files=$(find ${project_root} -path '*_mine_*' | \
-                sed -e "s!${project_root}!${current_name}!" -e 's/^/    /')
-  printf "\n${files:-no mine files}\n\n"
+mine_list(){ #HELPTEXT list all of the ._mine files in the project
+  local files=$(find ${project_root} -path '*._mine*' | \
+                sed -e "s!${project_root}/!!" -e 's/^/    /')
+  printf "\n$(tput setaf 6)${files:-no mine files}$(tput sgr0)\n\n"
 };
 
-mine_touch(){ #HELPTEXT an alias for `touch <file>_mine_`, because `_` is a pain.
-  for name in $@; do touch ${name}_mine_; done
+mine_touch_file(){
+  local full=$1
+  local ext=${full##*.}
+  local name=${full%.*}
+  touch ${name}._mine.${ext}
+}
+
+mine_touch(){ #HELPTEXT perhaps more natural than `touch <file>._mine`
+  for name in $@; do mine_touch_file ${name}; done
 };
 
-mine_init(){ #HELPTEXT creates a `<projectname>_mine_.md` file and a `_mine_/` directory
-  local newdir=${project_root}/_mine_
+mine_init(){ #HELPTEXT creates a `<projectname>._mine.md` file and a `notes._mine/` directory
+  local newdir=${project_root}/notes._mine
   if [ ! -d "${newdir}" ]; then mkdir ${newdir} ; fi
-  touch ${current_name}_mine_.md ${newdir}/{notes,todo}.md
+  touch ${current_name}._mine.md \
+        ${newdir}/{notes,todo}.md
 };
 
 mine_help(){
   hl=$(tput bold)
   norm=$(tput sgr0)
-  printf "\n${hl}mine${norm} | manage your personal, project-related files in a versioned repo\n\n"
-  sed -n -e "${LINENO}q" -e '/#HELPTEXT/{s!^[^_]\+_\([a-z]\+\)[^#]\+#HELPTEXT\(.*$\)!  \1\t\2!;p}' $0 \
+  echo
+  printf "${hl}mine${norm} | manage your personal, project-related files in a versioned repo"
+  echo
+  echo
+  sed -n \
+      -e "${LINENO}q" \
+      -e '/#HELPTEXT/{
+            s!^[^_]\+_\([a-z]\+\)[^#]\+#HELPTEXT\(.*$\)!  \1\t\2!
+            p
+          }' \
+      $0 \
   | column -t -s $'\t'
   echo
 };
 
 case $1 in
   help|touch|clean|purge|list|restore|snap|init) mine_"$1" "${@:2}" ;;
-  *) mine_help ;;
+  debug) mine_debug ;;
+  *) mine_help && exit 1;;
 esac

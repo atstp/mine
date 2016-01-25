@@ -12,7 +12,7 @@
 #          or set it ~/.gitignore_global
 #            `git config --global --add core.excludesfile ~/.gitignore_global`
 #
-#       b. add a rule to exclude `*_mine_*`
+#       b. add a rule to exclude `*._mine*`
 #
 #    2. add a function to your bash starup file to call
 #       the mine executable at ${PWD}/mine
@@ -24,7 +24,10 @@ function print_instructions () {
   echo
   echo "You'll need to take a few steps yoursef:"
   echo
-  cat "$0" | sed -n '/configuration steps:/,/^##/{/^##/q;s/^.//p}'
+  cat "$0" | sed -n '/configuration steps:/,/^##/{
+                       /^##/q
+                       s/^.//p
+                    }'
   echo
 }
 
@@ -34,11 +37,9 @@ echo
 types="mac ubuntu zsh NONE"
 select shell_type in $types; do
   case $shell_type in
-
     "mac")    shell_rc="${HOME}/.bash_profile" && break ;;
     "ubuntu") shell_rc="${HOME}/.bashrc"       && break ;;
     "zsh")    shell_rc="${HOME}/.zshrc"        && break ;;
-
     "NONE")   print_instructions && exit 1 ;;
   esac
 done
@@ -54,9 +55,9 @@ excludes=$(git config --global --get core.excludesfile)
 # set it to the default
 git config --global --add core.excludesfile ${excludes:=~/.gitignore_global}
 
-# append the ``*_mine_*'' rule to the file
-sed -i -e '/^\*_mine_\*$/q' \
-       -e '$ a *_mine_*' ${excludes}
+# append the ``*._mine*'' rule to the file
+sed -i -e '/^\*._mine\*$/q' \
+       -e '$ a *._mine*' ${excludes}
 
 (
 cat <<END_OF_FUNCTION
@@ -73,7 +74,7 @@ echo
 echo "$(tput setaf 2)mine is all configured!$(tput sgr0)"
 echo
 echo "    $(tput bold)${excludes}$(tput sgr0) is the global git ignore file"
-echo "    filenames matching $(tput bold)*_mine_*$(tput sgr0) will be ignored"
+echo "    filenames matching $(tput bold)*._mine*$(tput sgr0) will be ignored"
 echo
 echo "    to use mine now, run the following to source your new configuration"
 echo

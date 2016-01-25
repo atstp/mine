@@ -13,21 +13,21 @@ an example:
                                            yours?
     hypothetical_repo/
         readme.md
-        _mine_AWSloginInfo                 ✓
-        usabilityIdeas_mine_               ✓
+        ._mineAWSloginInfo                 ✓
+        usabilityIdeas._mine               ✓
         bin/
             build
             generate
-            fixEveryonesWhitespace_mine_   ✓
+            fixEveryonesWhitespace._mine   ✓
         src/
             main.file
             ...
-        _mine_/                            ✓
+        ._mine/                            ✓
             notes                          ✓
             todays-todo                    ✓
         ...
 
-the `mine` command along with the `_mine_` files leave you free to
+the `mine` command along with the `._mine` files leave you free to
 
 :closed_lock_with_key: keep login info for a related service with your repo
 &mdash; :pencil: leave notes for yourself about where you left off and what to do later
@@ -39,11 +39,11 @@ the `mine` command along with the `_mine_` files leave you free to
 
 ## commands
 
-  * **`mine snap`** - take a snapshot of your current `_mine_` files
+  * **`mine snap`** - take a snapshot of your current `._mine` files
   * **`mine restore`** - restore the last snapshot
-  * **`mine clean`** - remove all `_mine_` files from your repo
+  * **`mine clean`** - remove all `._mine` files from your repo
   * **`mine purge`** - purge all mine files from the current project _and_ backups
-  * **`mine touch`** - an alternative to `touch fileName_mine_`
+  * **`mine touch`** - an alternative to `touch fileName._mine`
   * **`mine list`** - list the files under mine's aegis
   * **`mine help`**
 
@@ -55,7 +55,7 @@ the `mine` command along with the `_mine_` files leave you free to
     # exit and reopen your terminal
 
 mercurial users: after running `./configure`, add a rule to globally ignore
-`*_mine_*` files, in the `syntax: glob` section
+`*._mine*` files, in the `syntax: glob` section
 
 ### update it
 
