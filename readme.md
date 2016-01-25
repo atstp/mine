@@ -2,9 +2,9 @@
 
 If you're a fan of sticky notes, this could be for you.
 
-`mine` uses a global ignore :globe_with_meridians: along with a handful of bash
-functions to let you keep personal, _backup-able_ notes :memo: and repo-related
-records with your repo and _insulated from its history_.
+`mine` uses a global ignore along with a handful of bash functions to let you
+keep personal, _backup-able_ notes and repo-related records with your repo and
+_insulated from its history_.
 
 ## about
 
@@ -13,7 +13,7 @@ an example:
                                            yours?
     hypothetical_repo/
         readme.md
-        ._mineAWSloginInfo                 ✓
+        AWSloginInfo._mine                 ✓
         usabilityIdeas._mine               ✓
         bin/
             build
@@ -22,7 +22,7 @@ an example:
         src/
             main.file
             ...
-        ._mine/                            ✓
+        dev._mine/                         ✓
             notes                          ✓
             todays-todo                    ✓
         ...
@@ -71,7 +71,7 @@ MIT
 ### colophon
 
 The "users" will likely be myself, but it's here for anyone who finds it useful.
-This thing came about naturally for me: a local ignore, then a global ignore,
-followed by a few convenience commands, now it's wrapped up here :octocat:.
-If you've got an idea to make it more natural or intuitive, let me know with
-an issue or a pull request. Enjoy!
+This thing came about naturally for me: a local ignore, a global ignore, then a
+few convenience commands; hopefully that helped. Now it's here :octocat:.
+
+Any issues and a pull requests are welcome. Enjoy!
